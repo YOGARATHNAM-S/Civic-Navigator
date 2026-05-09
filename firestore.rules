@@ -1,0 +1,80 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Global safety net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Common Helpers
+    function isSignedIn() { return request.auth != null; }
+    function isOwner(userId) { return isSignedIn() && request.auth.uid == userId; }
+    function isAdmin() { 
+      return isSignedIn() && exists(/databases/$(database)/documents/admins/$(request.auth.uid)); 
+    }
+    function isValidId(id) { return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); }
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+
+    // User Profile Rules
+    match /users/{userId} {
+      function isValidUser(data) {
+        return data.keys().hasAll(['uid', 'email', 'role']) &&
+               data.uid == request.auth.uid &&
+               data.email is string &&
+               data.role in ['citizen', 'admin'];
+      }
+      
+      allow get: if isOwner(userId) || isAdmin();
+      allow create: if isOwner(userId) && isValidUser(incoming());
+      allow update: if isOwner(userId) && isValidUser(incoming()) && 
+                    incoming().diff(existing()).affectedKeys().hasOnly(['displayName', 'address', 'phoneNumber']);
+    }
+
+    // Complaints Rules
+    match /complaints/{complaintId} {
+      function isValidComplaint(data) {
+        return data.keys().hasAll(['userId', 'category', 'title', 'status', 'createdAt']) &&
+               data.userId == request.auth.uid &&
+               data.category in ['electricity', 'water', 'roads', 'garbage', 'traffic', 'property_tax', 'other'] &&
+               data.status in ['pending', 'in_progress', 'resolved', 'rejected'];
+      }
+
+      allow list: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow get: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow create: if isSignedIn() && isValidComplaint(incoming());
+      allow update: if isSignedIn() && (
+        // Citizen can update details if pending
+        (isOwner(existing().userId) && existing().status == 'pending' && 
+         incoming().diff(existing()).affectedKeys().hasOnly(['title', 'description', 'location'])) ||
+        // Admin can update status
+        (isAdmin() && incoming().diff(existing()).affectedKeys().hasOnly(['status', 'updatedAt']))
+      );
+    }
+
+    // Chat Rules
+    match /chats/{chatId} {
+      allow list, get: if isOwner(resource.data.userId) || isAdmin();
+      allow create: if isSignedIn() && incoming().userId == request.auth.uid;
+      allow update: if isOwner(existing().userId) && incoming().userId == request.auth.uid;
+
+      match /messages/{messageId} {
+        allow list, get: if isOwner(get(/databases/$(database)/documents/chats/$(chatId)).data.userId);
+        allow create: if isOwner(get(/databases/$(database)/documents/chats/$(chatId)).data.userId);
+      }
+    }
+
+    // Knowledge Base (RAG context)
+    match /knowledge_base/{docId} {
+      allow read: if true; // Publicly readable for assistant
+      allow write: if isAdmin();
+    }
+    
+    // System admins collection
+    match /admins/{adminId} {
+      allow read: if isSignedIn();
+      allow write: if false; // Only manageable through consoles or scripts
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "name": "Bengaluru Civic Navigator",
+  "description": "An intelligent civic assistant for Bengaluru citizens to navigate government services, taxes, utility services, and public grievances.",
+  "requestFramePermissions": ["camera", "geolocation", "microphone"],
+  "majorCapabilities": []
+}
