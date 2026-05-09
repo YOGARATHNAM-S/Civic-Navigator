@@ -97,12 +97,9 @@ export default function Layout() {
           <div className="bg-gradient-to-tr from-indigo-600 to-indigo-400 rounded-3xl p-5 text-white shadow-xl shadow-indigo-100">
             <p className="text-[10px] opacity-80 uppercase tracking-widest font-bold mb-1">Sahaya Helpline</p>
             <p className="text-lg font-bold">1533 / 1912</p>
-            <button 
-              onClick={handleLogout}
-              className="mt-4 w-full bg-white/20 hover:bg-white/30 py-2 rounded-xl text-xs font-bold transition-colors flex items-center justify-center gap-2"
-            >
-              <LogOut className="h-3 w-3" /> Logout
-            </button>
+            <div className="mt-4 w-full bg-white/20 py-2 rounded-xl text-[10px] font-bold text-center uppercase tracking-widest">
+              Live Portal
+            </div>
           </div>
         </div>
       </aside>
@@ -138,8 +135,8 @@ export default function Layout() {
               <button className="p-2.5 bg-white shadow-sm border border-white/60 rounded-xl text-slate-500 flex items-center justify-center">
                 <Bell className="h-5 w-5" />
               </button>
-              <div className="h-10 w-10 bg-white border border-white/60 rounded-full flex items-center justify-center shadow-sm font-bold text-sm">
-                {auth.currentUser?.email?.[0].toUpperCase() || 'U'}
+              <div className="h-10 w-10 bg-indigo-600 border border-indigo-500 text-white rounded-full flex items-center justify-center shadow-lg font-bold text-sm">
+                {auth.currentUser?.email?.[0].toUpperCase() || 'G'}
               </div>
             </div>
           </div>

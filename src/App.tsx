@@ -42,15 +42,13 @@ export default function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/login" element={!user ? <Login /> : <Navigate to="/" />} />
-        <Route
-          path="/"
-          element={user ? <Layout /> : <Navigate to="/login" />}
-        >
+        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Layout />}>
           <Route index element={<Dashboard />} />
           <Route path="chat" element={<Chat />} />
           <Route path="complaints" element={<Complaints />} />
         </Route>
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Router>
   );

@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Send, Bot, User as UserIcon, Loader2, Info } from 'lucide-react';
 import { getCivicResponse } from '../services/geminiService';
 import { dbService } from '../services/dbService';
+import { auth } from '../lib/firebase';
 import { cn } from '../lib/utils';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -31,15 +32,27 @@ export default function Chat() {
   }, [messages]);
 
   const loadChatHistory = async () => {
-    // In a real app, we might load from a specific sessionId
-    // For now, let's keep it simple or just use local state for the prototype session 
-    // but the system asked for full-stack. Let's just mock the load if no session id exists yet.
-    // However, I'll implement the SAVE logic for sure.
+    const userId = dbService.getUserId();
+    const sessionId = `chat_${userId}`;
+    try {
+      const history = await dbService.getChatHistory(sessionId);
+      if (history && history.length > 0) {
+        setMessages(history.map((m: any) => ({
+          id: m.id,
+          role: m.role,
+          content: m.content
+        })));
+      }
+    } catch (error) {
+      console.error("Failed to load history:", error);
+    }
   };
 
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
 
+    const userId = dbService.getUserId();
+    const sessionId = `chat_${userId}`;
     const userMsg: Message = { id: Date.now().toString(), role: 'user', content: input };
     setMessages(prev => [...prev, userMsg]);
     setInput('');
@@ -54,9 +67,9 @@ export default function Chat() {
       };
       setMessages(prev => [...prev, assistantMsg]);
       
-      // Save to Firestore (Optional but good for full-stack feel)
-      await dbService.addChatMessage('default-session', userMsg);
-      await dbService.addChatMessage('default-session', assistantMsg);
+      // Save to Firestore with user-specific session
+      await dbService.addChatMessage(sessionId, userMsg);
+      await dbService.addChatMessage(sessionId, assistantMsg);
     } catch (error) {
       console.error(error);
     } finally {
