@@ -1,117 +1,413 @@
-# Civic Navigator
+# 🚀 Bengaluru Civic Navigator
 
-<div align="center">
-  <img width="800" alt="Civic Navigator Banner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
-
-> Testing Finally completed
+AI-powered civic assistance platform for Bengaluru citizens using **Gemini AI**, **Elasticsearch**, **MongoDB**, and **React.js**.
 
 ---
 
-Civic Navigator is an AI-powered application built with TypeScript and Node.js, designed to help users seamlessly interact with their local civic resources. This project demonstrates how to run and deploy an AI Studio app quickly and easily.
+# 📌 Overview
 
-View the App in AI Studio: [Civic Navigator – AI Studio](https://ai.studio/apps/58ab6e5c-1d99-406b-a4d6-5144d6e5cb1b)
+Bengaluru Civic Navigator is an intelligent civic support platform that helps citizens access government-related information through an AI-powered chatbot and smart search engine.
 
-## Table of Contents
+The platform provides guidance for:
 
-- [Features](#features)
-- [Getting Started](#getting-started)
-- [Running Locally](#running-locally)
-- [Environment Variables](#environment-variables)
-- [Project Structure](#project-structure)
-- [Tech Stack](#tech-stack)
-- [Contributing](#contributing)
-- [License](#license)
+- BBMP services
+- BESCOM electricity services
+- BWSSB water services
+- Property tax queries
+- Traffic fines
+- Senior citizen schemes
+- RERA complaints
+- Public grievance support
 
 ---
 
-## Features
+# 🏗️ System Architecture
 
-- Fast setup for AI-powered civic engagement applications
-- Written in TypeScript (98.5%)
-- Quick local development and deployment
-- Easily configurable with environment variables
-- Ready for Gemini API integration
-
-## Getting Started
-
-Follow these instructions to set up and run the project locally.
-
-### Prerequisites
-
-- [Node.js](https://nodejs.org/) (preferably the latest LTS version)
-- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
-
-### Running Locally
-
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/YOGARATHNAM-S/Civic-Navigator.git
-   cd Civic-Navigator
-   ```
-2. **Install dependencies:**
-   ```bash
-   npm install
-   # or
-   yarn install
-   ```
-3. **Configure environment variables:**
-   - Copy the example file if provided (`.env.example` or similar), or create a new `.env.local` in the project root.
-   - Add your Gemini API key:
-     ```env
-     GEMINI_API_KEY=your-gemini-api-key
-     ```
-4. **Run the app in development mode:**
-   ```bash
-   npm run dev
-   # or
-   yarn dev
-   ```
-
-Visit [http://localhost:3000](http://localhost:3000) in your browser to see the app running.
-
-## Environment Variables
-
-- `GEMINI_API_KEY` — Required for integrating with the Gemini API. Add this in `.env.local`.
-
-## Project Structure
-
-A typical project structure might look like:
-
+```text
+User
+   ↓
+React Frontend
+   ↓
+Node.js / Express Backend
+   ↓
+Elasticsearch Search Layer
+   ↓
+Gemini API (Google AI Studio)
+   ↓
+MongoDB Database
 ```
-Civic-Navigator/
-├── src/
-│   ├── components/
-│   ├── pages/
-│   └── ...
-├── public/
-│   └── ...
-├── .env.local
-├── package.json
+
+---
+
+# ⚙️ Tech Stack
+
+## Frontend
+- React.js
+- Tailwind CSS
+- Axios
+- React Router DOM
+
+## Backend
+- Node.js
+- Express.js
+- JWT Authentication
+- Mongoose
+
+## Database
+- MongoDB (Local)
+
+## Search Engine
+- Elasticsearch (Local)
+
+## AI
+- Google Gemini API
+- Gemini 1.5 Flash
+
+---
+
+# ✨ Features
+
+## 🤖 AI Civic Chatbot
+- Natural language interaction
+- Kannada + English support
+- Smart civic guidance
+
+## 🔍 Smart Search
+- Elasticsearch-powered document retrieval
+- Fast civic information lookup
+
+## 📝 Complaint Management
+- Submit complaints
+- AI-based complaint categorization
+- Track complaint history
+
+## 📊 Admin Dashboard
+- Manage civic documents
+- Monitor complaints
+- Upload knowledge base files
+
+## 🔒 Security
+- JWT Authentication
+- API rate limiting
+- Helmet security middleware
+- Environment variable protection
+
+---
+
+# 📂 Project Structure
+
+```bash
+bengaluru-civic-navigator/
+│
+├── frontend/
+│   ├── src/
+│   ├── public/
+│   └── package.json
+│
+├── backend/
+│   ├── routes/
+│   ├── controllers/
+│   ├── middleware/
+│   ├── models/
+│   ├── services/
+│   ├── config/
+│   └── server.js
+│
+├── elasticsearch/
+├── uploads/
+├── docs/
+├── docker-compose.yml
 └── README.md
 ```
 
-## Tech Stack
+---
 
-- **Language:** TypeScript (98.5%)
-- **Backend/Logic:** Node.js
-- **Other:** Gemini AI API, npm scripts
+# 🔑 Environment Variables
 
-## Contributing
+Create a `.env` file inside the `backend/` folder.
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/my-new-feature`)
-3. Commit your changes (`git commit -am 'Add new feature'`)
-4. Push to the branch (`git push origin feature/my-new-feature`)
-5. Open a pull request
+```env
+PORT=5000
 
-## License
+MONGO_URI=mongodb://localhost:27017/civicnavigator
 
-This project is licensed under the [MIT License](LICENSE).  
-See the [LICENSE](LICENSE) file for more details.
+JWT_SECRET=your_secret_key
+
+GEMINI_API_KEY=your_gemini_api_key
+
+ELASTIC_ENDPOINT=http://localhost:9200
+
+ELASTIC_API_KEY=your_elastic_api_key
+```
 
 ---
 
-<div align="center">
-  <strong>Made with ❤️ in TypeScript</strong>
-</div>
+# 🧠 Gemini API Setup
+
+Get your API key from Google AI Studio:
+
+```text
+https://aistudio.google.com/app/apikey
+```
+
+## Install SDK
+
+```bash
+npm install @google/generative-ai
+```
+
+## Example Integration
+
+```javascript
+import { GoogleGenerativeAI } from "@google/generative-ai";
+
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+
+const model = genAI.getGenerativeModel({
+  model: "gemini-1.5-flash"
+});
+```
+
+---
+
+# 🔍 Elasticsearch Setup
+
+## Download Elasticsearch
+
+```text
+https://www.elastic.co/downloads/elasticsearch
+```
+
+## Start Elasticsearch
+
+### Windows
+
+```bash
+bin\elasticsearch.bat
+```
+
+### Linux / macOS
+
+```bash
+./bin/elasticsearch
+```
+
+## Verify Installation
+
+Open:
+
+```text
+http://localhost:9200
+```
+
+---
+
+# 🍃 MongoDB Setup
+
+## Start MongoDB
+
+```bash
+mongod
+```
+
+Database name:
+
+```text
+civicnavigator
+```
+
+---
+
+# 🚀 Backend Installation
+
+```bash
+cd backend
+npm install
+```
+
+## Run Backend
+
+```bash
+npm run dev
+```
+
+Backend URL:
+
+```text
+http://localhost:5000
+```
+
+---
+
+# 💻 Frontend Installation
+
+```bash
+cd frontend
+npm install
+```
+
+## Run Frontend
+
+```bash
+npm start
+```
+
+Frontend URL:
+
+```text
+http://localhost:3000
+```
+
+---
+
+# 🔄 RAG Workflow
+
+1. User asks civic question
+2. Backend searches Elasticsearch
+3. Relevant documents retrieved
+4. Context sent to Gemini API
+5. AI generates intelligent response
+6. Chat history stored in MongoDB
+
+---
+
+# 📡 API Endpoints
+
+## Authentication
+
+```bash
+/api/auth/register
+/api/auth/login
+```
+
+## Chat
+
+```bash
+/api/chat
+```
+
+## Complaints
+
+```bash
+/api/complaints
+```
+
+## Search
+
+```bash
+/api/search
+```
+
+## Documents
+
+```bash
+/api/documents
+```
+
+## Admin
+
+```bash
+/api/admin
+```
+
+---
+
+# 🐳 Docker Support
+
+## Run Using Docker Compose
+
+```bash
+docker-compose up --build
+```
+
+---
+
+# 🔒 Security Features
+
+- JWT Authentication
+- Password Hashing
+- API Validation
+- Rate Limiting
+- Secure Headers
+- Environment Variable Protection
+
+---
+
+# 🌐 Future Enhancements
+
+- 🎤 Voice Assistant
+- 📄 OCR for Government Documents
+- 📱 Mobile Application
+- 🌍 Multilingual Translation
+- 💬 WhatsApp Integration
+- 🚦 Real-Time Civic Alerts
+
+---
+
+# 📸 Screenshots
+
+Store screenshots inside:
+
+```text
+/docs/screenshots/
+```
+
+---
+
+# 📘 Example Use Cases
+
+## 🏠 Property Tax Guidance
+
+### User Query
+> How to pay BBMP property tax?
+
+### AI Response
+- Step-by-step instructions
+- Required documents
+- Official process explanation
+
+---
+
+## 🚰 Complaint Assistance
+
+### User Query
+> Water leakage issue in my area
+
+### AI Action
+- Categorizes complaint
+- Suggests responsible department
+- Stores complaint record
+
+---
+
+# 🧪 Sample Dataset
+
+Store civic datasets inside:
+
+```text
+/docs/datasets/
+```
+
+Supported formats:
+- PDF
+- JSON
+- CSV
+- TXT
+
+---
+
+# 👨‍💻 Author
+
+Developed for smart civic assistance and AI-powered governance solutions.
+
+---
+
+# 📄 License
+
+MIT License
+
+---
+
+# ⭐ Project Goal
+
+Build an AI-driven civic ecosystem that simplifies public services and improves citizen engagement using modern AI and search technologies.
